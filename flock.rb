@@ -1,5 +1,5 @@
 #! /usr/bin/ruby
-# seeing if this works
+
 require 'rubygems'
 require 'rubygame'
 
