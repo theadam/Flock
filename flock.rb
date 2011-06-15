@@ -17,7 +17,6 @@ class Ball
     @radius = radius
     @color = color
     @speed = [0,0]
-    @moving = false
     randomize
   end
 
@@ -34,15 +33,8 @@ class Ball
     if @leader
       delta_x, delta_y, distance = distance_with_parts(@leader)
       speed = [distance - (@leader.radius + @radius), @speed].min
-      if (speed < 0.2)
-        @moving = false
-        
-      end
-      if (@moving || distance > @distance)
-        center[0] += speed * delta_x / distance
-        center[1] += speed * delta_y / distance
-        @moving = true
-      end
+      center[0] += speed * delta_x / distance
+      center[1] += speed * delta_y / distance
       randomize
     end
   end
@@ -84,7 +76,7 @@ ball_list = []
 
 cur_ball = mouse_ball
 
-50.times do
+2.times do
   ball_list << Ball.new(@screen)
   ball_list[-1].leader = cur_ball
   #cur_ball = ball_list[-1]
@@ -112,9 +104,13 @@ while should_run
       collide = ball_list[j]
       delta_x, delta_y, distance = ball.distance_with_parts(collide)
       if ( distance < ball.radius + collide.radius)
-        ball.center[0] += (ball.radius+collide.radius) - distance       
-        #collide.center[0] -= (ball.center[0] += (((ball.radius + collide.radius) * delta_x) / distance)/2 )
-       #collide.center[1] -= (ball.center[1] += (((ball.radius + collide.radius) * delta_y) / distance)/2 )
+        #ball.center[0] += (ball.radius+collide.radius) - distance       
+        move_x = (((ball.radius + collide.radius) * delta_x) / distance)/2 
+        ball.center[0] += move_x
+        collide.center[0] -=  move_x
+        move_y = (((ball.radius + collide.radius) * delta_y) / distance)/2 
+        ball.center[1] += move_y
+        collide.center[1] -= move_y      
       end
     end
   end  
